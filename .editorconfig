@@ -1,0 +1,3 @@
+[{*.go,*.md,*.yml,*.json,*.sql}]
+indent_style = space
+indent_size = 2
