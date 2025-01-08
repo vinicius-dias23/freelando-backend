@@ -13,6 +13,7 @@ func Routes() *chi.Mux {
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 	r.Post("/authentication-service/logar", cmd.Logar)
+	r.Post("/authentication-service/create-user", cmd.CreateUser)
 
 	return r
 }
