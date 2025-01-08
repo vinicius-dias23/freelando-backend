@@ -8,8 +8,8 @@ type User struct {
 	Name     string `json:"name"`
 	UserName string `json:"userName"`
 	Email    string `json:"email"`
-	Cpf      uint64 `json:"cpf"`
-	Number   uint64 `json:"number"`
+	Cpf      int64  `json:"cpf"`
+	Number   int64  `json:"number"`
 	Password string `json:"password"`
 }
 
