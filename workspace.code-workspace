@@ -1,7 +1,16 @@
 {
   "folders": [
     {
-      "path": "authentication-service"
-    }
+      "path": "authentication-service",
+    },
+    {
+      "path": "profile-service",
+    },
+    {
+      "path": "core-service",
+    },
+    {
+      "path": "chat-service",
+    },
   ]
 }
