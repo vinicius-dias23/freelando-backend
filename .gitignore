@@ -1,0 +1,8 @@
+# local database
+project/db-data
+
+# build files
+authentication-service/authApp
+chat-service/chatApp
+core-service/coreApp
+profile-service/profileApp

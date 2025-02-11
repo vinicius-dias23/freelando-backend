@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+  authentication-service:
+    build:
+      context: ./../authentication-service
+      dockerfile: ./../authentication-service/authentication-service.dockerfile
+    restart: always
+    ports:
+      - "8080:80"
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  chat-service:
+    build:
+      context: ./../chat-service
+      dockerfile: ./../chat-service/chat-service.dockerfile
+    restart: always
+    ports:
+      - "8081:80"
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  core-service:
+    build:
+      context: ./../core-service
+      dockerfile: ./../core-service/core-service.dockerfile
+    restart: always
+    ports:
+      - "8082:80"
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  profile-service:
+    build:
+      context: ./../profile-service
+      dockerfile: ./../profile-service/profile-service.dockerfile
+    restart: always
+    ports:
+      - "8083:80"
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  postgres:
+    image: 'postgres:14.0'
+    ports:
+      - "5434:5434"
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: POSTGRES_PASSWORD
+      POSTGRES_DB: users
+    volumes:
+      - ./db-data/postgres/:/var/lib/postgresql/data
+    command: -p 5434
