@@ -1,20 +1,22 @@
-package cmd
+package main
 
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"net/http"
-	"reflect"
 )
 
 type jsonResponse struct {
 	Error   bool   `json:"error"`
 	Message string `json:"message"`
+	Data    any    `json:"data,omitempty"`
 }
 
-func readJSON(r *http.Request, data any) error {
+func (app *Config) readJSON(w http.ResponseWriter, r *http.Request, data any) error {
+	maxBytes := 1048576
+	r.Body = http.MaxBytesReader(w, r.Body, int64(maxBytes))
+
 	dec := json.NewDecoder(r.Body)
 	err := dec.Decode(data)
 	if err != nil {
@@ -29,7 +31,7 @@ func readJSON(r *http.Request, data any) error {
 	return nil
 }
 
-func writeJSON(w http.ResponseWriter, status int, data any, headers ...http.Header) error {
+func (app *Config) writeJSON(w http.ResponseWriter, status int, data any, headers ...http.Header) error {
 	out, err := json.Marshal(data)
 	if err != nil {
 		return err
@@ -51,7 +53,7 @@ func writeJSON(w http.ResponseWriter, status int, data any, headers ...http.Head
 	return nil
 }
 
-func errorJSON(w http.ResponseWriter, err error, status ...int) error {
+func (app *Config) errorJSON(w http.ResponseWriter, err error, status ...int) error {
 	statusCode := http.StatusBadRequest
 
 	if len(status) > 0 {
@@ -62,33 +64,5 @@ func errorJSON(w http.ResponseWriter, err error, status ...int) error {
 	payload.Error = true
 	payload.Message = err.Error()
 
-	return writeJSON(w, statusCode, payload)
-}
-
-func validateStruct(data interface{}) error {
-	val := reflect.ValueOf(data)
-
-	if val.Kind() != reflect.Struct {
-		return errors.New(
-			"necessário passar uma struct como parâmetro da função para a validação dos campos",
-		)
-	}
-
-	for i := 0; i < val.NumField(); i++ {
-		field := val.Field(i)
-		fieldName := val.Type().Field(i).Name
-
-		switch field.Kind() {
-		case reflect.String:
-			if field.String() == "" {
-				return fmt.Errorf("campo '%s' é obrigatório", fieldName)
-			}
-		case reflect.Int, reflect.Int64:
-			if field.Int() <= 0 {
-				return fmt.Errorf("campo '%s' deve ser maior que 0", fieldName)
-			}
-		}
-	}
-
-	return nil
+	return app.writeJSON(w, statusCode, payload)
 }

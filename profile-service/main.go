@@ -10,7 +10,8 @@ import (
 const webPort = "80"
 
 func main() {
-	fmt.Println("Escutando na porta :80")
+	log.Printf("Listening on port :%s", webPort)
+
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%s", webPort),
 		Handler: api.Routes(),

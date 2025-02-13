@@ -1,31 +1,18 @@
-package cmd
+package main
 
-import (
-	"net/http"
-)
+// func CreateUser(w http.ResponseWriter, r *http.Request) {
+// 	var usr *User
+// 	err := readJSON(r, &usr)
+// 	if err != nil {
+// 		errorJSON(w, err, http.StatusBadRequest)
+// 		return
+// 	}
 
-type User struct {
-	Name     string `json:"name"`
-	UserName string `json:"userName"`
-	Email    string `json:"email"`
-	Cpf      int64  `json:"cpf"`
-	Number   int64  `json:"number"`
-	Password string `json:"password"`
-}
+// 	err = validateStruct(*usr)
+// 	if err != nil {
+// 		errorJSON(w, err, http.StatusBadRequest)
+// 		return
+// 	}
 
-func CreateUser(w http.ResponseWriter, r *http.Request) {
-	var usr *User
-	err := readJSON(r, &usr)
-	if err != nil {
-		errorJSON(w, err, http.StatusBadRequest)
-		return
-	}
-
-	err = validateStruct(*usr)
-	if err != nil {
-		errorJSON(w, err, http.StatusBadRequest)
-		return
-	}
-
-	writeJSON(w, http.StatusCreated, "Usuário criado com sucesso!")
-}
+// 	writeJSON(w, http.StatusCreated, "Usuário criado com sucesso!")
+// }
