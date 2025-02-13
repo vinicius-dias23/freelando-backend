@@ -11,7 +11,7 @@ func (app *Config) routes() *chi.Mux {
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 	r.Post("/authentication-service/login", app.Authenticate)
-	// r.Post("/authentication-service/create-user", CreateUser)
+	r.Post("/authentication-service/create-user", app.CreateUser)
 
 	return r
 }

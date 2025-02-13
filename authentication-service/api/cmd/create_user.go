@@ -1,18 +1,30 @@
 package main
 
-// func CreateUser(w http.ResponseWriter, r *http.Request) {
-// 	var usr *User
-// 	err := readJSON(r, &usr)
-// 	if err != nil {
-// 		errorJSON(w, err, http.StatusBadRequest)
-// 		return
-// 	}
+import (
+	"authentication-service/data"
+	"net/http"
+)
 
-// 	err = validateStruct(*usr)
-// 	if err != nil {
-// 		errorJSON(w, err, http.StatusBadRequest)
-// 		return
-// 	}
+func (app *Config) CreateUser(w http.ResponseWriter, r *http.Request) {
+	var requestPayload data.User
 
-// 	writeJSON(w, http.StatusCreated, "Usuário criado com sucesso!")
-// }
+	err := app.readJSON(w, r, &requestPayload)
+	if err != nil {
+		app.errorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+
+	err = validateStruct(requestPayload)
+	if err != nil {
+		app.errorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+
+	_, err = app.Repo.Insert(requestPayload)
+	if err != nil {
+		app.errorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+
+	app.writeJSON(w, http.StatusCreated, "Usuário criado com sucesso!")
+}

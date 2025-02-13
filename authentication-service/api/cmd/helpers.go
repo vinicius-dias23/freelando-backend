@@ -3,8 +3,10 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
+	"reflect"
 )
 
 type jsonResponse struct {
@@ -65,4 +67,32 @@ func (app *Config) errorJSON(w http.ResponseWriter, err error, status ...int) er
 	payload.Message = err.Error()
 
 	return app.writeJSON(w, statusCode, payload)
+}
+
+func validateStruct(data interface{}) error {
+	val := reflect.ValueOf(data)
+
+	if val.Kind() != reflect.Struct {
+		return errors.New(
+			"necessário passar uma struct como parâmetro da função, para a validação dos campos",
+		)
+	}
+
+	for i := 0; i < val.NumField(); i++ {
+		field := val.Field(i)
+		fieldName := val.Type().Field(i).Name
+
+		switch field.Kind() {
+		case reflect.String:
+			if field.String() == "" {
+				return fmt.Errorf("campo '%s' é obrigatório", fieldName)
+			}
+		case reflect.Int, reflect.Int64:
+			if field.Int() <= 0 {
+				return fmt.Errorf("campo '%s' deve ser maior que 0", fieldName)
+			}
+		}
+	}
+
+	return nil
 }
