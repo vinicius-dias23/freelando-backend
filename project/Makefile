@@ -26,7 +26,7 @@ down:
 ## build_auth: builds the auth binary as a linux executable
 build_auth:
 	@echo "Building auth binary..."
-	cd ../authentication-service && env GOOS=linux CGO_ENABLED=0 go build -o ${AUTH_BINARY} .
+	cd ../authentication-service && env GOOS=linux CGO_ENABLED=0 go build -o ${AUTH_BINARY} ./api/cmd
 	@echo "Done!"
 
 ## build_chat: builds the chat binary as a linux executable
